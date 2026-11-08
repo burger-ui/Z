@@ -267,6 +267,27 @@
       font-size: 1.1rem
     }
 
+    .tulip-bouquet {
+      display: grid;
+      justify-items: center;
+      gap: .2rem;
+      margin-top: .6rem
+    }
+
+    .tulip-bouquet span {
+      font-size: clamp(2.4rem, 10vw, 3.4rem);
+      letter-spacing: .12em;
+      line-height: 1.2;
+      filter: drop-shadow(0 5px 10px var(--glow))
+    }
+
+    .tulip-bouquet p {
+      margin: 0;
+      color: var(--berry);
+      font-family: var(--hand);
+      font-size: 1.45rem
+    }
+
     .scroll {
       margin-top: 2.5rem;
       font-size: 1.8rem;
@@ -583,6 +604,10 @@
     <div class="wrap">
       <header class="hero">Someone who cares has a little something for you, Belle. Open it and see what it is. 💌
         <h1>Happy Birthday, Belle!</h1>
+        <div class="tulip-bouquet" role="img" aria-label="A bouquet of tulips, Belle’s favorite flowers">
+          <span aria-hidden="true">🌷🌷🌷</span>
+          <p>A little bouquet of your favorite flowers</p>
+        </div>
         <a class="scroll" href="#letter" aria-label="Scroll to your letter">🎂</a>
       </header>
 
