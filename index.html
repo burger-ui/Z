@@ -503,6 +503,25 @@
       transition: transform .3s, box-shadow .3s
     }
 
+    .reveal-ready [data-reveal] {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease
+    }
+
+    .reveal-ready [data-reveal].revealed {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .reveal-ready .w[data-reveal]:nth-child(2) {
+      transition-delay: .12s
+    }
+
+    .reveal-ready .w[data-reveal]:nth-child(3) {
+      transition-delay: .24s
+    }
+
     .w:hover {
       transform: translateY(-6px) rotate(-1deg);
       box-shadow: 0 16px 30px var(--glow)
@@ -577,6 +596,11 @@
         transition: none !important
       }
 
+      .reveal-ready [data-reveal] {
+        opacity: 1;
+        transform: none
+      }
+
       .f {
         display: none
       }
@@ -611,7 +635,7 @@
         <a class="scroll" href="#letter" aria-label="Scroll to your letter">🎂</a>
       </header>
 
-      <section id="letter" class="letter">
+      <section id="letter" class="letter" data-reveal>
         <h3>Dear Belle,</h3>
         <p>Hi Belle.. I just want to greet you a happiest birthday. 🎂</p>
         <p>Stay healthy and kumain ka lagi ng tama sa oras, don’t over work yourself that much. Remember that you always
@@ -629,21 +653,21 @@
       </section>
 
       <section class="wishes" aria-label="Birthday wishes">
-        <div class="w"><b>🍓</b>
+        <div class="w" data-reveal><b>🍓</b>
           <h4>Eat well</h4>
           <p>On time, and with something yummy. You deserve to be taken care of, even by yourself.</p>
         </div>
-        <div class="w"><b>☁️</b>
+        <div class="w" data-reveal><b>☁️</b>
           <h4>Rest softly</h4>
           <p>Your mind and body can always take a break. Slow days are allowed.</p>
         </div>
-        <div class="w"><b>🏡</b>
+        <div class="w" data-reveal><b>🏡</b>
           <h4>Feel safe</h4>
           <p>May you always have people and places that feel like home.</p>
         </div>
       </section>
 
-      <section class="cake-sec">
+      <section class="cake-sec" data-reveal>
         <p class="hand" style="font-family:var(--hand);font-size:2rem;color:var(--berry);margin:0">Make a wish, Belle
         </p>
         <p class="hint">Tap each candle to blow it out</p>
@@ -661,7 +685,7 @@
         <div id="wish" role="status"></div>
       </section>
 
-      <footer>
+      <footer data-reveal>
         <p class="big">Stay pretty, Belle <span class="heart">💗</span></p>
         <p>Happy Birthday once again. I hope today feels as lovely as you are.</p>
         <button class="btn" id="more">Send me more hearts</button>
@@ -705,7 +729,24 @@
       var gate = document.getElementById('gate'), main = document.getElementById('main'), opened = false;
       function open() {
         if (opened) return; opened = true;
-        gate.classList.add('out'); main.classList.add('on'); burst(60);
+        gate.classList.add('out');
+        document.body.classList.add('reveal-ready');
+        main.classList.add('on');
+        var revealItems = document.querySelectorAll('[data-reveal]');
+        if ('IntersectionObserver' in window) {
+          var revealObserver = new IntersectionObserver(function (entries, observer) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.12 });
+          revealItems.forEach(function (item) { revealObserver.observe(item); });
+        } else {
+          revealItems.forEach(function (item) { item.classList.add('revealed'); });
+        }
+        burst(60);
         setTimeout(function () { gate.style.display = 'none' }, 1000);
         window.scrollTo(0, 0);
       }
